@@ -11,7 +11,7 @@ import java.util.Collection;
 
 @Service
 @Transactional
-public abstract class ServiceBase<TEntity, TId, TRepository extends JpaRepository<TEntity, TId>> {
+public abstract class EntityServiceBase<TEntity, TId, TRepository extends JpaRepository<TEntity, TId>> {
 
     @Autowired
     protected TRepository repository;
@@ -21,7 +21,7 @@ public abstract class ServiceBase<TEntity, TId, TRepository extends JpaRepositor
         return repository.findById(id).orElse(null);
     }
 
-    public Collection<TEntity> findAll(TId id) {
+    public Collection<TEntity> findAll() {
         return repository.findAll();
     }
 
