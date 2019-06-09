@@ -5,14 +5,17 @@ import com.crossover.mobiliza.business.entity.User;
 import com.crossover.mobiliza.business.service.GoogleAuthService;
 import com.crossover.mobiliza.business.service.OngService;
 import com.crossover.mobiliza.business.service.UserService;
+import com.crossover.mobiliza.presentation.dto.OngDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 public class OngController {
@@ -27,28 +30,29 @@ public class OngController {
     private GoogleAuthService googleAuthService;
 
     @GetMapping("/ongs")
-    private Collection<Ong> getAll() {
+    private Collection<OngDto> getAll() {
         // TODO: Add pagination to this
-        return ongService.findAll();
+        return ongService.findAll().stream().map(OngDto::new).collect(Collectors.toList());
     }
 
     @GetMapping(path = "/ongs/{id}")
-    private Ong get(@PathVariable("id") long id) {
+    private OngDto get(@PathVariable("id") long id) {
         Ong ong = ongService.findById(id);
         if (ong == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ong not found");
-        return ong;
+        return new OngDto(ong);
     }
 
     @PostMapping(path = "/ongs", params = {"googleIdToken"})
-    private Ong save(@RequestBody Ong ong,
-                     @RequestParam("googleIdToken") String googleIdToken,
-                     HttpServletRequest request) {
+    private OngDto save(@Valid @RequestBody OngDto ongDto,
+                        @RequestParam("googleIdToken") String googleIdToken,
+                        HttpServletRequest request) {
 
         User user = googleAuthService.getOrCreateUserFromIdToken(googleIdToken);
         if (user == null)
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token invalid");
 
+        Ong ong = ongDto.toOng();
         Ong currentOng = user.getOng();
         if (currentOng == null) {
             ong.setId(null);
@@ -64,6 +68,6 @@ public class OngController {
             ong.setUser(user);
             currentOng = ongService.save(ong);
         }
-        return currentOng;
+        return new OngDto(currentOng);
     }
 }
