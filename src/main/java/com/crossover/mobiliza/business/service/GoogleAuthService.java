@@ -69,8 +69,11 @@ public class GoogleAuthService {
                 Ong ong = user.getOng();
                 if (ong == null) {
                     ong = new Ong();
-                    ong.setNome("Nova ONG");
+                    ong.setNome("ONG de " + userData.getName());
                     ong.setDescricao("Nenhuma descrição.");
+                    ong.setEmail(userData.getEmail());
+                    ong.setRegiao("Desconhecida");
+                    ong.setCategoria("Desconhecida");
                     ong.setUser(user);
                     ong = ongService.save(ong);
                     user.setOng(ong);
@@ -81,6 +84,7 @@ public class GoogleAuthService {
                 if (voluntario == null) {
                     voluntario = new Voluntario();
                     voluntario.setNome(userData.getName());
+                    voluntario.setEmail(userData.getEmail());
                     voluntario.setUser(user);
                     voluntario = voluntarioService.save(voluntario);
                     user.setVoluntario(voluntario);
