@@ -69,7 +69,10 @@ public class GoogleAuthService {
                 Ong ong = user.getOng();
                 if (ong == null) {
                     ong = new Ong();
-                    ong.setNome("ONG de " + userData.getName());
+                    String nome = "ONG de " + userData.getName();
+                    if (nome.length() > 32)
+                        nome = nome.substring(0, 32);
+                    ong.setNome(nome);
                     ong.setDescricao("Nenhuma descrição.");
                     ong.setEmail(userData.getEmail());
                     ong.setRegiao("Desconhecida");
