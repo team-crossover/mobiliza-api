@@ -77,7 +77,7 @@ public class OngController {
             else if (!Objects.equals(currentOng.getId(), ong.getId()))
                 throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User already has another Ong - Is " + ong.getId() + " but should be " + currentOng.getId());
             ong.setUser(user);
-            currentOng = ongService.save(ong);
+            currentOng = ongService.saveNonNullFields(ong);
         }
         return new OngDto(currentOng);
     }

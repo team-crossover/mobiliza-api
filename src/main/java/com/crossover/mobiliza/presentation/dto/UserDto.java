@@ -18,7 +18,7 @@ public class UserDto {
 
     private String googleIdToken;
 
-    private boolean lastUsedAsOng;
+    private Boolean lastUsedAsOng;
 
     private Long idOng;
 
