@@ -30,9 +30,20 @@ public class OngController {
     private GoogleAuthService googleAuthService;
 
     @GetMapping("/ongs")
-    private Collection<OngDto> getAll() {
+    private Collection<OngDto> getAll(@RequestParam(value = "categoria", required = false) String categoria,
+                                      @RequestParam(value = "regiao", required = false) String regiao) {
+
         // TODO: Add pagination to this
-        return ongService.findAll().stream().map(OngDto::new).collect(Collectors.toList());
+        Collection<Ong> ongs;
+        if (categoria != null) {
+            ongs = ongService.findAllByCategoria(categoria);
+        } else {
+            ongs = ongService.findAll();
+        }
+        if (regiao != null) {
+            ongs = ongs.stream().filter(e -> e.getRegiao().equals(regiao)).collect(Collectors.toList());
+        }
+        return ongs.stream().map(OngDto::new).collect(Collectors.toList());
     }
 
     @GetMapping(path = "/ongs/{id}")

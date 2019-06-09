@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
@@ -16,27 +18,29 @@ public class OngDto {
 
     private Long id;
 
-    @Size(min = 1, max = 32)
+    @Size(max = 32)
     private String nome;
 
-    @Size(min = 1, max = 512)
+    @NotBlank
+    @Size(max = 512)
     private String descricao;
 
-    @Size(min = 1, max = 24)
+    @NotBlank
+    @Size(max = 24)
     private String categoria;
 
-    @Size(min = 1, max = 16)
-    private String telefone;
+    @NotBlank
+    private String regiao;
 
-    @Size(min = 1, max = 48)
-    private String email;
-
-    @Size(min = 1, max = 96)
+    @Size(max = 96)
     private String endereco;
 
-    private Double latitude;
+    @Size(max = 24)
+    private String telefone;
 
-    private Double longitude;
+    @Email
+    @Size(max = 64)
+    private String email;
 
     public OngDto(Ong ong) {
         this.id = ong.getId();
@@ -46,8 +50,7 @@ public class OngDto {
         this.telefone = ong.getTelefone();
         this.email = ong.getEmail();
         this.endereco = ong.getEndereco();
-        this.latitude = ong.getLatitude();
-        this.longitude = ong.getLongitude();
+        this.regiao = ong.getRegiao();
     }
 
     public Ong toOng() {
@@ -59,8 +62,7 @@ public class OngDto {
                 .telefone(telefone)
                 .email(email)
                 .endereco(endereco)
-                .latitude(latitude)
-                .longitude(longitude)
+                .regiao(regiao)
                 .build();
     }
 

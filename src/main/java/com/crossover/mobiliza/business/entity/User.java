@@ -1,10 +1,10 @@
 package com.crossover.mobiliza.business.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -12,15 +12,16 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-@ToString(exclude = {"eventos"})
 public class User {
 
     @Id
     @GeneratedValue
     private Long id;
 
+    @NotBlank
     private String googleId;
 
+    @NotNull
     private boolean lastUsedAsOng;
 
     @OneToOne
@@ -29,9 +30,4 @@ public class User {
     @OneToOne
     private Voluntario voluntario;
 
-    // ---
-
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<Evento> eventos;
 }

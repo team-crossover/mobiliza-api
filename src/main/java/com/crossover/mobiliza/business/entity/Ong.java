@@ -4,47 +4,61 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ong")
-@ToString(exclude = {"user"})
+@Table(name = "ongs")
+@ToString(exclude = {"user", "eventos"})
 public class Ong {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Size(min = 1, max = 32)
+    @NotBlank
+    @Size(max = 32)
     private String nome;
 
-    @Size(min = 1, max = 512)
+    @NotBlank
+    @Size(max = 512)
     private String descricao;
 
-    @Size(min = 1, max = 24)
+    @NotBlank
+    @Size(max = 24)
     private String categoria;
 
-    @Size(min = 1, max = 16)
-    private String telefone;
+    @NotBlank
+    private String regiao;
 
-    @Size(min = 1, max = 48)
-    private String email;
-
-    @Size(min = 1, max = 96)
+    @Size(max = 96)
     private String endereco;
 
-    private Double latitude;
+    @Size(max = 24)
+    private String telefone;
 
-    private Double longitude;
+    @Email
+    @Size(max = 64)
+    private String email;
+
+//    TODO: Adicionar suporte a imagens
+//    private Imagem imgPerfil;
 
     // ---
 
     @OneToOne(mappedBy = "ong")
     @JsonIgnore
     private User user;
+
+    @OneToMany(mappedBy = "ong")
+    @JsonIgnore
+    private Collection<Evento> eventos = new ArrayList<>();
 
 }
