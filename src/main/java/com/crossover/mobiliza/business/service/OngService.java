@@ -46,7 +46,7 @@ public class OngService extends EntityServiceBase<Ong, Long, OngRepository> {
             ong.setEndereco(newOng.getNome());
         if (newOng.getTelefone() != null)
             ong.setTelefone(newOng.getTelefone());
-        
-        return repository.save(newOng);
+
+        return repository.save(ong);
     }
 }
