@@ -15,5 +15,29 @@ public class VoluntarioService extends EntityServiceBase<Voluntario, Long, Volun
     public Voluntario findByUserId(Long idOwner) {
         return repository.findByUserId(idOwner).orElse(null);
     }
-    
+
+    public Voluntario saveNonNullFields(Voluntario newVoluntario) {
+        if (newVoluntario.getId() == null) {
+            return save(newVoluntario);
+        }
+
+        Voluntario voluntario = findById(newVoluntario.getId());
+        if (voluntario == null) {
+            return save(newVoluntario);
+        }
+
+        if (newVoluntario.getDataNascimento() != null)
+            voluntario.setDataNascimento(newVoluntario.getDataNascimento());
+        if (newVoluntario.getEmail() != null)
+            voluntario.setEmail(newVoluntario.getEmail());
+        if (newVoluntario.getEventosConfirmados() != null)
+            voluntario.setEventosConfirmados(newVoluntario.getEventosConfirmados());
+        if (newVoluntario.getNome() != null)
+            voluntario.setNome(newVoluntario.getNome());
+        if (newVoluntario.getTelefone() != null)
+            voluntario.setTelefone(newVoluntario.getTelefone());
+
+        return repository.save(voluntario);
+    }
+
 }

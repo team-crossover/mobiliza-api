@@ -16,4 +16,30 @@ public class EventoService extends EntityServiceBase<Evento, Long, EventoReposit
         return repository.findAllByOngId(ongId);
     }
 
+    public Evento saveNonNullFields(Evento newEvento) {
+        if (newEvento.getId() == null) {
+            return save(newEvento);
+        }
+
+        Evento evento = findById(newEvento.getId());
+        if (evento == null) {
+            return save(newEvento);
+        }
+
+        if (newEvento.getRegiao() != null)
+            evento.setRegiao(newEvento.getRegiao());
+        if (newEvento.getDataRealizacao() != null)
+            evento.setDataRealizacao(newEvento.getDataRealizacao());
+        if (newEvento.getConfirmados() != null)
+            evento.setConfirmados(newEvento.getConfirmados());
+        if (newEvento.getDescricao() != null)
+            evento.setDescricao(newEvento.getDescricao());
+        if (newEvento.getEndereco() != null)
+            evento.setEndereco(newEvento.getEndereco());
+        if (newEvento.getNome() != null)
+            evento.setNome(newEvento.getNome());
+
+        return repository.save(evento);
+    }
+
 }

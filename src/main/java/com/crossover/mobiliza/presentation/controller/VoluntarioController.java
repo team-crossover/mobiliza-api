@@ -60,7 +60,7 @@ public class VoluntarioController {
             else if (!Objects.equals(currentVolunt.getId(), voluntario.getId()))
                 throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User already has another Voluntario - Is " + voluntario.getId() + " but should be " + currentVolunt.getId());
             voluntario.setUser(user);
-            currentVolunt = voluntarioService.save(voluntario);
+            currentVolunt = voluntarioService.saveNonNullFields(voluntario);
         }
         return currentVolunt;
     }

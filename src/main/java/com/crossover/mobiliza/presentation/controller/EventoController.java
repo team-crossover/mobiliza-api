@@ -80,7 +80,10 @@ public class EventoController {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User's doesn't own this Event's Ong");
 
         Evento evento = eventoDto.toEvento(ongService, voluntarioService);
-        evento = eventoService.save(evento);
+        if (evento.getId() == null)
+            evento = eventoService.save(evento);
+        else
+            evento = eventoService.saveNonNullFields(evento);
         return new EventoDto(evento);
     }
 }
