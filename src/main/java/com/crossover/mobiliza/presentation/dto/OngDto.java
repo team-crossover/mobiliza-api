@@ -6,10 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -18,28 +14,18 @@ public class OngDto {
 
     private Long id;
 
-    @Size(max = 32)
     private String nome;
 
-    @NotBlank
-    @Size(max = 512)
     private String descricao;
 
-    @NotBlank
-    @Size(max = 24)
     private String categoria;
 
-    @NotBlank
     private String regiao;
 
-    @Size(max = 96)
     private String endereco;
 
-    @Size(max = 24)
     private String telefone;
 
-    @Email
-    @Size(max = 64)
     private String email;
 
     public OngDto(Ong ong) {

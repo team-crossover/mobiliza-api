@@ -10,10 +10,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.ManyToMany;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,27 +23,18 @@ public class EventoDto {
 
     private Long id;
 
-    @NotNull
     private Long idOng;
 
-    @ManyToMany
     private List<Long> idsConfirmados = new ArrayList<>();
 
-    @NotBlank
-    @Size(max = 64)
     private String nome;
 
-    @NotBlank
-    @Size(max = 128)
     private String descricao;
 
-    @NotBlank
     private String regiao;
 
-    @Size(max = 96)
     private String endereco;
 
-    @NotNull
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dataRealizacao;
 
