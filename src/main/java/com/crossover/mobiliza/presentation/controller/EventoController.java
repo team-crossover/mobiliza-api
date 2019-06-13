@@ -79,6 +79,7 @@ public class EventoController {
         if (eventoDto.getIdOng() != null && !Objects.equals(eventoDto.getIdOng(), userOng.getId()))
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User's doesn't own this Event's Ong");
 
+        eventoDto.setIdOng(user.getOng().getId());
         Evento evento = eventoDto.toEvento(ongService, voluntarioService);
         if (evento.getId() == null)
             evento = eventoService.save(evento);
