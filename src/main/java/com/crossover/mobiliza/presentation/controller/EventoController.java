@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
@@ -67,7 +68,10 @@ public class EventoController {
     @PostMapping(path = "/eventos")
     private EventoDto save(@Valid @RequestBody EventoDto eventoDto,
                            @RequestParam("googleIdToken") String googleIdToken,
-                           HttpServletRequest request) {
+                           HttpServletRequest request) throws IOException {
+
+        System.out.println(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+        System.out.println(request.toString());
 
         User user = googleAuthService.getOrCreateUserFromIdToken(googleIdToken);
         if (user == null)
