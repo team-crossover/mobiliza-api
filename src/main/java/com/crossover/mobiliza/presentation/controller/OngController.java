@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 public class OngController {
@@ -32,18 +33,18 @@ public class OngController {
     @GetMapping("/ongs")
     private Collection<OngDto> getAll(@RequestParam(value = "categoria", required = false) String categoria,
                                       @RequestParam(value = "regiao", required = false) String regiao) {
-
         // TODO: Add pagination to this
-        Collection<Ong> ongs;
+        Stream<Ong> ongs;
         if (categoria != null) {
-            ongs = ongService.findAllByCategoria(categoria);
+            ongs = ongService.findAllByCategoria(categoria).stream();
         } else {
-            ongs = ongService.findAll();
+            ongs = ongService.findAll().stream();
         }
         if (regiao != null) {
-            ongs = ongs.stream().filter(e -> e.getRegiao().equals(regiao)).collect(Collectors.toList());
+            String finalRegiao = regiao.toLowerCase();
+            ongs = ongs.filter(e -> e.getRegiao().toLowerCase().equals(finalRegiao));
         }
-        return ongs.stream().map(OngDto::new).collect(Collectors.toList());
+        return ongs.map(OngDto::new).collect(Collectors.toList());
     }
 
     @GetMapping(path = "/ongs/{id}")

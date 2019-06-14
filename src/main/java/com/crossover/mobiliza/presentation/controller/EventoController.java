@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 public class EventoController {
@@ -38,23 +39,36 @@ public class EventoController {
 
     @GetMapping("/eventos")
     private Collection<EventoDto> getAll(@RequestParam(value = "idOng", required = false) Long idOng,
+                                         @RequestParam(value = "categoria", required = false) String categoria,
+                                         @RequestParam(value = "regiao", required = false) String regiao,
                                          @RequestParam(value = "finalizado", required = false) Boolean finalizado) {
         // TODO: Add pagination to this
-        Collection<Evento> eventos;
+        Stream<Evento> eventos;
         if (idOng != null) {
-            eventos = eventoService.findAllByOngId(idOng);
+            eventos = eventoService.findAllByOngId(idOng).stream();
         } else {
-            eventos = eventoService.findAll();
+            eventos = eventoService.findAll().stream();
+        }
+
+        if (regiao != null) {
+            String finalRegiao = regiao.toLowerCase();
+            eventos = eventos.filter(e -> e.getRegiao().toLowerCase().equals(finalRegiao));
+        }
+
+        if (categoria != null) {
+            String finalCat = categoria.toLowerCase();
+            eventos = eventos.filter(e -> e.getOng().getCategoria().toLowerCase().equals(finalCat));
         }
         if (finalizado != null) {
             LocalDateTime now = LocalDateTime.now();
             if (finalizado) {
-                eventos = eventos.stream().filter(e -> e.getDataRealizacao().isBefore(now)).collect(Collectors.toList());
+                eventos = eventos.filter(e -> e.getDataRealizacao().isBefore(now));
             } else {
-                eventos = eventos.stream().filter(e -> !e.getDataRealizacao().isBefore(now)).collect(Collectors.toList());
+                eventos = eventos.filter(e -> !e.getDataRealizacao().isBefore(now));
             }
         }
-        return eventos.stream().map(EventoDto::new).collect(Collectors.toList());
+
+        return eventos.map(EventoDto::new).collect(Collectors.toList());
     }
 
     @GetMapping(path = "/eventos/{id}")
