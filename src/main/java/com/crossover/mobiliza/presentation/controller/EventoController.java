@@ -70,9 +70,6 @@ public class EventoController {
                            @RequestParam("googleIdToken") String googleIdToken,
                            HttpServletRequest request) throws IOException {
 
-        System.out.println(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
-        System.out.println(request.toString());
-
         User user = googleAuthService.getOrCreateUserFromIdToken(googleIdToken);
         if (user == null)
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token invalid");
