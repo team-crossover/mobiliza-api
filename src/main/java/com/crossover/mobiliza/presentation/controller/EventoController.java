@@ -54,7 +54,6 @@ public class EventoController {
             String finalRegiao = regiao.toLowerCase();
             eventos = eventos.filter(e -> e.getRegiao().toLowerCase().equals(finalRegiao));
         }
-
         if (categoria != null) {
             String finalCat = categoria.toLowerCase();
             eventos = eventos.filter(e -> e.getOng().getCategoria().toLowerCase().equals(finalCat));
