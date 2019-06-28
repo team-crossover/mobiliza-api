@@ -80,8 +80,8 @@ public class GoogleAuthService {
         if (ong == null && asOng != null && asOng) {
             ong = new Ong();
             String nomeOng = "ONG de " + userData.getName();
-            if (nomeOng.length() > 32)
-                nomeOng = nomeOng.substring(0, 32);
+            if (nomeOng.length() > 29)
+                nomeOng = nomeOng.substring(0, 29) + "...";
             ong.setNome(nomeOng);
             ong.setDescricao("Nenhuma descrição.");
             ong.setEmail(userData.getEmail());

@@ -103,6 +103,29 @@ public class EventoController {
         return new EventoDto(evento);
     }
 
+    @DeleteMapping(path = "/eventos/{id}")
+    private String deletar(@PathVariable("id") Long id,
+                           @RequestParam("googleIdToken") String googleIdToken,
+                           HttpServletRequest request) throws IOException {
+
+        User user = googleAuthService.getOrCreateUserFromIdToken(googleIdToken);
+        if (user == null)
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token invalid");
+
+        Ong userOng = user.getOng();
+        if (userOng == null)
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User doesn't have an Ong");
+
+        Evento evento = eventoService.findById(id);
+        if (evento == null)
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "There's no event with such ID");
+        if (!Objects.equals(evento.getOng().getId(), userOng.getId()))
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User's doesn't own this Event's Ong");
+
+        eventoService.deleteById(evento.getId());
+        return "OK";
+    }
+
     @PostMapping(path = "/eventos/{id}/confirmar")
     private EventoDto confirmar(@PathVariable("id") Long id,
                                 @RequestParam("googleIdToken") String googleIdToken,
