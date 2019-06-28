@@ -43,7 +43,7 @@ public class VoluntarioController {
     private Voluntario get(@PathVariable("id") long id) {
         Voluntario voluntario = voluntarioService.findById(id);
         if (voluntario == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Voluntario not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Voluntario não encontrado");
         return voluntario;
     }
 
@@ -53,11 +53,11 @@ public class VoluntarioController {
 
         User user = googleAuthService.getOrCreateUserFromIdToken(googleIdToken);
         if (user == null)
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token invalid");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token inválido");
 
         Voluntario vol = user.getVoluntario();
         if (vol == null)
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User doesn't have a Voluntario");
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User não possui um Voluntario");
 
         // Remove do user
         user.setVoluntario(null);
@@ -79,7 +79,7 @@ public class VoluntarioController {
 
         User user = googleAuthService.getOrCreateUserFromIdToken(googleIdToken);
         if (user == null)
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token invalid");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token inválido");
 
         Voluntario currentVolunt = user.getVoluntario();
         if (currentVolunt == null) {
@@ -92,7 +92,7 @@ public class VoluntarioController {
             if (voluntario.getId() == null)
                 voluntario.setId(currentVolunt.getId());
             else if (!Objects.equals(currentVolunt.getId(), voluntario.getId()))
-                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User already has another Voluntario - Is " + voluntario.getId() + " but should be " + currentVolunt.getId());
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User já possui outro Voluntário");
             voluntario.setUser(user);
             currentVolunt = voluntarioService.saveNonNullFields(voluntario);
         }

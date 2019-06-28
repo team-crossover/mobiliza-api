@@ -24,11 +24,11 @@ public class UserController {
     private UserDto getByGoogleId(@RequestParam(value = "googleIdToken", required = true) String googleIdToken,
                                   @RequestParam(value = "asOng", required = false) Boolean asOng) {
         if (googleIdToken == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Google ID Token not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Google ID Token não encontrado");
 
         User user = googleAuthService.getOrCreateUserFromIdToken(googleIdToken, asOng);
         if (user == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User couldn't be found/created");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User não pôde ser lido ou criado");
 
         UserDto userDto = new UserDto(user);
         userDto.setGoogleIdToken(googleIdToken);

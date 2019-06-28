@@ -54,7 +54,7 @@ public class OngController {
     private OngDto get(@PathVariable("id") long id) {
         Ong ong = ongService.findById(id);
         if (ong == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ong not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ONG não encontrada");
         return new OngDto(ong);
     }
 
@@ -64,16 +64,16 @@ public class OngController {
 
         User user = googleAuthService.getOrCreateUserFromIdToken(googleIdToken);
         if (user == null)
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token invalid");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token inválido");
 
         Ong ong = user.getOng();
         if (ong == null)
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User doesn't have an Ong");
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User não possui ONG");
 
         // Checa se tem eventos pendentes
         LocalDateTime now = LocalDateTime.now();
         if (ong.getEventos().stream().filter(e -> !e.getDataRealizacao().isBefore(now)).count() > 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Can't delete Ong with unfinished events");
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Não é possível deletar ONGs com eventos pendentes");
         }
 
         // Remove do user
@@ -91,7 +91,7 @@ public class OngController {
 
         User user = googleAuthService.getOrCreateUserFromIdToken(googleIdToken);
         if (user == null)
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token invalid");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token inválido");
 
         Ong ong = ongDto.toOng();
         Ong currentOng = user.getOng();
@@ -105,7 +105,7 @@ public class OngController {
             if (ong.getId() == null)
                 ong.setId(currentOng.getId());
             else if (!Objects.equals(currentOng.getId(), ong.getId()))
-                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User already has another Ong - Is " + ong.getId() + " but should be " + currentOng.getId());
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User já possui outra ONG");
             ong.setUser(user);
             currentOng = ongService.saveNonNullFields(ong);
         }

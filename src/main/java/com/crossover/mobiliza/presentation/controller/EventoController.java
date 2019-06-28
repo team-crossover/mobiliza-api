@@ -76,7 +76,7 @@ public class EventoController {
     private EventoDto get(@PathVariable("id") long id) {
         Evento evento = eventoService.findById(id);
         if (evento == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento não encontrado");
         return new EventoDto(evento);
     }
 
@@ -87,13 +87,13 @@ public class EventoController {
 
         User user = googleAuthService.getOrCreateUserFromIdToken(googleIdToken);
         if (user == null)
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token invalid");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token inválido");
 
         Ong userOng = user.getOng();
         if (userOng == null)
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User doesn't have an Ong");
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User não possui uma ONG");
         if (eventoDto.getIdOng() != null && !Objects.equals(eventoDto.getIdOng(), userOng.getId()))
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User's doesn't own this Event's Ong");
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User não possui a ONG deste evento");
 
         eventoDto.setIdOng(user.getOng().getId());
         Evento evento = eventoDto.toEvento(ongService, voluntarioService);
@@ -111,17 +111,17 @@ public class EventoController {
 
         User user = googleAuthService.getOrCreateUserFromIdToken(googleIdToken);
         if (user == null)
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token invalid");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token inválido");
 
         Ong userOng = user.getOng();
         if (userOng == null)
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User doesn't have an Ong");
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User não possui uma ONG");
 
         Evento evento = eventoService.findById(id);
         if (evento == null)
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "There's no event with such ID");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento não encontrado");
         if (!Objects.equals(evento.getOng().getId(), userOng.getId()))
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User's doesn't own this Event's Ong");
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User não possui a ONG deste evento");
 
         eventoService.deleteById(evento.getId());
         return new OngDto(userOng);
@@ -135,15 +135,15 @@ public class EventoController {
 
         User user = googleAuthService.getOrCreateUserFromIdToken(googleIdToken);
         if (user == null)
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token invalid");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token inválido");
 
         Voluntario userVoluntario = user.getVoluntario();
         if (userVoluntario == null)
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User doesn't have a Voluntario");
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User não possui um Voluntário");
 
         Evento evento = eventoService.findById(id);
         if (evento == null)
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "There's no event with such ID");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento não encontrado");
 
         evento.getConfirmados().removeIf(v -> v.getId().equals(userVoluntario.getId()));
         if (valor)
