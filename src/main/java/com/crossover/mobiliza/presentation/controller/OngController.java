@@ -6,6 +6,7 @@ import com.crossover.mobiliza.business.service.GoogleAuthService;
 import com.crossover.mobiliza.business.service.OngService;
 import com.crossover.mobiliza.business.service.UserService;
 import com.crossover.mobiliza.presentation.dto.OngDto;
+import com.crossover.mobiliza.presentation.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -53,6 +56,27 @@ public class OngController {
         if (ong == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ong not found");
         return new OngDto(ong);
+    }
+
+    @DeleteMapping(path = "/ongs")
+    private UserDto deletarMinhaOng(@RequestParam("googleIdToken") String googleIdToken,
+                                    HttpServletRequest request) throws IOException {
+
+        User user = googleAuthService.getOrCreateUserFromIdToken(googleIdToken);
+        if (user == null)
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token invalid");
+
+        Ong ong = user.getOng();
+        if (ong == null)
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User doesn't have an Ong");
+
+        LocalDateTime now = LocalDateTime.now();
+        if (ong.getEventos().stream().filter(e -> !e.getDataRealizacao().isBefore(now)).count() > 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Can't delete Ong with unfinished events");
+        }
+
+        ongService.deleteById(ong.getId());
+        return new UserDto(user);
     }
 
     @PostMapping(path = "/ongs", params = {"googleIdToken"})
