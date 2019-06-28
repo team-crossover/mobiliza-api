@@ -22,7 +22,7 @@ public class User {
     private String googleId;
 
     @NotNull
-    private boolean lastUsedAsOng;
+    private boolean lastUsedAsOng = false;
 
     @OneToOne
     private Ong ong;

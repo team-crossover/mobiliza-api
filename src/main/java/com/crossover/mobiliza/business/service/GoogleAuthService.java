@@ -92,7 +92,9 @@ public class GoogleAuthService {
             user.setOng(ong);
         }
 
-        user.setLastUsedAsOng(asOng != null ? asOng : false);
+        if (asOng != null)
+            user.setLastUsedAsOng(asOng);
+
         user = userService.save(user);
         return user;
     }
