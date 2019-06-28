@@ -3,6 +3,7 @@ package com.crossover.mobiliza.presentation.controller;
 import com.crossover.mobiliza.business.entity.Evento;
 import com.crossover.mobiliza.business.entity.Ong;
 import com.crossover.mobiliza.business.entity.User;
+import com.crossover.mobiliza.business.entity.Voluntario;
 import com.crossover.mobiliza.business.service.*;
 import com.crossover.mobiliza.presentation.dto.EventoDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +100,32 @@ public class EventoController {
             evento = eventoService.save(evento);
         else
             evento = eventoService.saveNonNullFields(evento);
+        return new EventoDto(evento);
+    }
+
+    @PostMapping(path = "/eventos/{id}/confirmar")
+    private EventoDto confirmar(@PathVariable("id") Long id,
+                                @RequestParam("googleIdToken") String googleIdToken,
+                                @RequestParam("valor") Boolean valor,
+                                HttpServletRequest request) throws IOException {
+
+        User user = googleAuthService.getOrCreateUserFromIdToken(googleIdToken);
+        if (user == null)
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Google ID Token invalid");
+
+        Voluntario userVoluntario = user.getVoluntario();
+        if (userVoluntario == null)
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User doesn't have a Voluntario");
+
+        Evento evento = eventoService.findById(id);
+        if (evento == null)
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "There's no event with such ID");
+
+        evento.getConfirmados().removeIf(v -> v.getId().equals(userVoluntario.getId()));
+        if (valor)
+            evento.getConfirmados().add(userVoluntario);
+        evento = eventoService.save(evento);
+
         return new EventoDto(evento);
     }
 }

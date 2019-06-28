@@ -64,10 +64,20 @@ public class GoogleAuthService {
             user = userService.save(user);
         }
 
-        // Add default ong and voluntario
+        // Add default voluntario
+        Voluntario voluntario = user.getVoluntario();
+        if (voluntario == null) {
+            voluntario = new Voluntario();
+            voluntario.setNome(userData.getName());
+            voluntario.setEmail(userData.getEmail());
+            voluntario.setUser(user);
+            voluntario = voluntarioService.save(voluntario);
+            user.setVoluntario(voluntario);
+        }
 
+        // Add default ong
         Ong ong = user.getOng();
-        if (ong == null) {
+        if (ong == null && asOng != null && asOng) {
             ong = new Ong();
             String nomeOng = "ONG de " + userData.getName();
             if (nomeOng.length() > 32)
@@ -82,18 +92,7 @@ public class GoogleAuthService {
             user.setOng(ong);
         }
 
-        Voluntario voluntario = user.getVoluntario();
-        if (voluntario == null) {
-            voluntario = new Voluntario();
-            voluntario.setNome(userData.getName());
-            voluntario.setEmail(userData.getEmail());
-            voluntario.setUser(user);
-            voluntario = voluntarioService.save(voluntario);
-            user.setVoluntario(voluntario);
-        }
-
-        if (asOng != null)
-            user.setLastUsedAsOng(asOng);
+        user.setLastUsedAsOng(asOng != null ? asOng : false);
         user = userService.save(user);
         return user;
     }
