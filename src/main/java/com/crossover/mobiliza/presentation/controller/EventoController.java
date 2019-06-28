@@ -6,6 +6,7 @@ import com.crossover.mobiliza.business.entity.User;
 import com.crossover.mobiliza.business.entity.Voluntario;
 import com.crossover.mobiliza.business.service.*;
 import com.crossover.mobiliza.presentation.dto.EventoDto;
+import com.crossover.mobiliza.presentation.dto.OngDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -104,7 +105,7 @@ public class EventoController {
     }
 
     @DeleteMapping(path = "/eventos/{id}")
-    private String deletar(@PathVariable("id") Long id,
+    private OngDto deletar(@PathVariable("id") Long id,
                            @RequestParam("googleIdToken") String googleIdToken,
                            HttpServletRequest request) throws IOException {
 
@@ -123,7 +124,7 @@ public class EventoController {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User's doesn't own this Event's Ong");
 
         eventoService.deleteById(evento.getId());
-        return "OK";
+        return new OngDto(userOng);
     }
 
     @PostMapping(path = "/eventos/{id}/confirmar")
