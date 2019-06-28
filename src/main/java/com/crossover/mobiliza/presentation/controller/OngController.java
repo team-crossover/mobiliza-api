@@ -70,10 +70,15 @@ public class OngController {
         if (ong == null)
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User doesn't have an Ong");
 
+        // Checa se tem eventos pendentes
         LocalDateTime now = LocalDateTime.now();
         if (ong.getEventos().stream().filter(e -> !e.getDataRealizacao().isBefore(now)).count() > 0) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Can't delete Ong with unfinished events");
         }
+
+        // Remove do user
+        user.setOng(null);
+        user = userService.save(user);
 
         ongService.deleteById(ong.getId());
         return new UserDto(user);

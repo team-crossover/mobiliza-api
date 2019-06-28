@@ -59,6 +59,10 @@ public class VoluntarioController {
         if (vol == null)
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User doesn't have a Voluntario");
 
+        // Remove do user
+        user.setVoluntario(null);
+        user = userService.save(user);
+
         // Remove confirmação dos eventos
         for (Evento evtConfirmado : vol.getEventosConfirmados()) {
             evtConfirmado.getConfirmados().removeIf(evt -> evt.getId().equals(vol.getId()));
