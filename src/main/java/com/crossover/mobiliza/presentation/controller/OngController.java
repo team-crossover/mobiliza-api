@@ -1,7 +1,9 @@
 package com.crossover.mobiliza.presentation.controller;
 
+import com.crossover.mobiliza.business.entity.Evento;
 import com.crossover.mobiliza.business.entity.Ong;
 import com.crossover.mobiliza.business.entity.User;
+import com.crossover.mobiliza.business.service.EventoService;
 import com.crossover.mobiliza.business.service.GoogleAuthService;
 import com.crossover.mobiliza.business.service.OngService;
 import com.crossover.mobiliza.business.service.UserService;
@@ -32,6 +34,9 @@ public class OngController {
 
     @Autowired
     private GoogleAuthService googleAuthService;
+
+    @Autowired
+    private EventoService eventoService;
 
     @GetMapping("/ongs")
     private Collection<OngDto> getAll(@RequestParam(value = "categoria", required = false) String categoria,
@@ -74,6 +79,11 @@ public class OngController {
         LocalDateTime now = LocalDateTime.now();
         if (ong.getEventos().stream().filter(e -> !e.getDataRealizacao().isBefore(now)).count() > 0) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Não é possível deletar ONGs com eventos pendentes");
+        }
+
+        // Remove todos eventos
+        for (Evento evento : ong.getEventos()) {
+            eventoService.deleteById(evento.getId());
         }
 
         // Remove do user
