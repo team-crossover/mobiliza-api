@@ -87,6 +87,7 @@ public class VoluntarioController {
             voluntario.setUser(user);
             currentVolunt = voluntarioService.save(voluntario);
             user.setVoluntario(currentVolunt);
+            user.setLastUsedAsOng(false);
             user = userService.save(user);
         } else {
             if (voluntario.getId() == null)
@@ -95,6 +96,8 @@ public class VoluntarioController {
                 throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User já possui outro Voluntário");
             voluntario.setUser(user);
             currentVolunt = voluntarioService.saveNonNullFields(voluntario);
+            user.setLastUsedAsOng(false);
+            user = userService.save(user);
         }
         return currentVolunt;
     }

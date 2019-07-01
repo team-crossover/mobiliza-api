@@ -110,6 +110,7 @@ public class OngController {
             ong.setUser(user);
             currentOng = ongService.save(ong);
             user.setOng(currentOng);
+            user.setLastUsedAsOng(true);
             user = userService.save(user);
         } else {
             if (ong.getId() == null)
@@ -118,6 +119,8 @@ public class OngController {
                 throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "User já possui outra ONG");
             ong.setUser(user);
             currentOng = ongService.saveNonNullFields(ong);
+            user.setLastUsedAsOng(true);
+            user = userService.save(user);
         }
         return new OngDto(currentOng);
     }
