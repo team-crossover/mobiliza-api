@@ -38,6 +38,8 @@ public class EventoService extends EntityServiceBase<Evento, Long, EventoReposit
             evento.setEndereco(newEvento.getEndereco());
         if (newEvento.getNome() != null)
             evento.setNome(newEvento.getNome());
+        if (newEvento.getImg() != null)
+            evento.setImg(newEvento.getImg());
 
         return repository.save(evento);
     }
