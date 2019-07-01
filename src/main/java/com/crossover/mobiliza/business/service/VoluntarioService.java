@@ -36,8 +36,6 @@ public class VoluntarioService extends EntityServiceBase<Voluntario, Long, Volun
             voluntario.setNome(newVoluntario.getNome());
         if (newVoluntario.getTelefone() != null)
             voluntario.setTelefone(newVoluntario.getTelefone());
-        if (newVoluntario.getImgPerfil() != null)
-            voluntario.setImgPerfil(newVoluntario.getImgPerfil());
 
         return repository.save(voluntario);
     }
