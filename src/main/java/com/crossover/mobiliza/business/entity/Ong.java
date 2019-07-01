@@ -48,8 +48,9 @@ public class Ong {
     @Size(max = 64)
     private String email;
 
-//    TODO: Adicionar suporte a imagens
-//    private Imagem imgPerfil;
+    @Basic(fetch = FetchType.LAZY)
+    @Size(max = 10485760)
+    private String imgPerfil;
 
     // ---
 

@@ -38,6 +38,8 @@ public class EventoDto {
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dataRealizacao;
 
+    private String img;
+
     public EventoDto(Evento evento) {
         this.id = evento.getId();
         this.idOng = evento.getOng().getId();
@@ -47,6 +49,7 @@ public class EventoDto {
         this.regiao = evento.getRegiao();
         this.endereco = evento.getEndereco();
         this.dataRealizacao = evento.getDataRealizacao();
+        this.img = evento.getImg();
     }
 
     public Evento toEvento(OngService ongService, VoluntarioService voluntarioService) {
@@ -59,6 +62,7 @@ public class EventoDto {
                 .regiao(regiao)
                 .endereco(endereco)
                 .dataRealizacao(dataRealizacao)
+                .img(img)
                 .build();
     }
 

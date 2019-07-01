@@ -49,4 +49,8 @@ public class Evento {
     @NotNull
     private LocalDateTime dataRealizacao;
 
+    @Basic(fetch = FetchType.LAZY)
+    @Size(max = 10485760)
+    private String img;
+
 }

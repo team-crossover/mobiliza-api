@@ -28,6 +28,8 @@ public class OngDto {
 
     private String email;
 
+    private String imgPerfil;
+
     public OngDto(Ong ong) {
         this.id = ong.getId();
         this.nome = ong.getNome();
@@ -37,6 +39,7 @@ public class OngDto {
         this.email = ong.getEmail();
         this.endereco = ong.getEndereco();
         this.regiao = ong.getRegiao();
+        this.imgPerfil = ong.getImgPerfil();
     }
 
     public Ong toOng() {
@@ -49,6 +52,7 @@ public class OngDto {
                 .email(email)
                 .endereco(endereco)
                 .regiao(regiao)
+                .imgPerfil(imgPerfil)
                 .build();
     }
 
