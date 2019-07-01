@@ -70,7 +70,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
         ong.setCategoria("Animais");
         ong.setEmail("gatos@larissa.com");
         ong.setEndereco("Rua C-75, Lote 12, Alameda dos Gatos, Setor Sul");
-        ong.setRegiao("Região Sul");
+        ong.setRegiao("Sul");
         ong.setTelefone("1687468");
         ong = ongService.save(ong);
 
@@ -79,7 +79,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
         evento.setNome("Feira de adoção de gatos");
         evento.setDescricao("Vamos adotar gatos!");
         evento.setEndereco("Rua C-75, Lote 12, Alameda dos Gatos, Setor Sul");
-        evento.setRegiao("Região Sul");
+        evento.setRegiao("Sul");
         evento.setOng(ong);
         evento = eventoService.save(evento);
 
@@ -88,7 +88,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
         evento2.setNome("Castração de gatos");
         evento2.setDescricao("Vamos castrar gatos de graça!");
         evento2.setEndereco("Rua C-75, Lote 12, Alameda dos Gatos, Setor Sul");
-        evento2.setRegiao("Região Sul");
+        evento2.setRegiao("Sul");
         evento2.setOng(ong);
         evento2 = eventoService.save(evento2);
 
@@ -97,7 +97,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
         evento3.setNome("Beijar gatos");
         evento3.setDescricao("Vamos beijar uns gatos na pracinha!");
         evento3.setEndereco("Rua C-75, Lote 12, Alameda dos Gatos, Setor Sul");
-        evento3.setRegiao("Região Sul");
+        evento3.setRegiao("Sul");
         evento3.setOng(ong);
         evento3 = eventoService.save(evento3);
     }
