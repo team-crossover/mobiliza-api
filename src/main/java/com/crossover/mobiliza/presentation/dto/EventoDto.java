@@ -40,6 +40,8 @@ public class EventoDto {
 
     private String img;
 
+    private String categoria;
+
     public EventoDto(Evento evento) {
         this.id = evento.getId();
         this.idOng = evento.getOng().getId();
@@ -50,6 +52,7 @@ public class EventoDto {
         this.endereco = evento.getEndereco();
         this.dataRealizacao = evento.getDataRealizacao();
         this.img = evento.getImg();
+        this.categoria = evento.getOng().getCategoria();
     }
 
     public Evento toEvento(OngService ongService, VoluntarioService voluntarioService) {
