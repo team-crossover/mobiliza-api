@@ -6,8 +6,5 @@ Trabalho feito para disciplina de Desenvolvimento para Dispositivos Móveis, do 
 ## Como testar
 O sistema está implantado em https://mobiliza-api.herokuapp.com.
 
-## Documentação
-A documentação está disponível em https://mobiliza-api.herokuapp.com/swagger-ui.html.
-
 ## Licença
 [MIT License](LICENSE)
